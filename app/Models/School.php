@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class School extends Model
+class School extends Authenticatable
 {
-    use Authenticatable;
 
     protected $fillable = [
         'school_name', 'address', 'email', 'phone_number', 'password', 'profile_picture',
