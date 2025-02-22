@@ -29,7 +29,7 @@ class RegisteredSchoolController extends Controller
         ]);
     
         if ($validator->fails()) {
-            dd($validator->errors()->all()); // Dump all error messages
+            dd($validator->errors()->all()); 
         }
 
         $school = School::create([
@@ -40,7 +40,6 @@ class RegisteredSchoolController extends Controller
             'password' => Hash::make($request->password),
         ]);
         
-        
         if ($request->hasFile('profile_picture')) {
             $file = $request->file('profile_picture');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -50,10 +49,8 @@ class RegisteredSchoolController extends Controller
             $school->save();
         }
 
-        event(new Registered($school));
-
-        Auth::guard('school')->login($school);
-
-        return redirect()->route('School.dashboard');
+         event(new Registered($school));
+ 
+         return redirect()->route('School.login')->with('message', 'Registration successful! Please verify your email.');
     }
 }

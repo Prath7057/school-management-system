@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\School\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\SchoolLoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -22,14 +22,29 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(SchoolLoginRequest $request): RedirectResponse
+    public function store(Request $request)
     {
-        $request->authenticate();
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
-        return redirect()->intended(route('School.dashboard', absolute: false))
-        ->with('school', auth()->guard('school')->user());;
+        if (Auth::guard('school')->attempt($credentials, $request->filled('remember'))) {
+            $user = Auth::guard('school')->user();
+
+            if (!$request->user()->hasVerifiedEmail()) {
+                Auth::guard('school')->logout();
+                throw ValidationException::withMessages([
+                    'email' => 'Your email is not verified. Please check your inbox.',
+                ]);
+            }
+
+            return redirect()->route('School.dashboard');
+        }
+
+        return back()->withErrors(['email' => 'Invalid credentials']);
     }
 
     /**

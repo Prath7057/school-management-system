@@ -63,9 +63,7 @@ Route::prefix('School')->name('School.')->group(function () {
         Route::get('verify-email', [VerifyEmailController::class, 'show'])
             ->name('verification.notice');
 
-        Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])
-            ->middleware(['signed', 'throttle:6,1'])
-            ->name('verification.verify');
+       
 
         Route::post('email/verification-notification', [VerifyEmailController::class, 'resend'])
             ->middleware('throttle:6,1')
@@ -91,4 +89,7 @@ Route::prefix('School')->name('School.')->group(function () {
         Route::get('import-students', [StudentController::class, 'createImportStudents'])->name('importStudents');
         Route::post('import-students', [StudentController::class, 'importStudents'])->name('importStudents');
     });
+    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
 });

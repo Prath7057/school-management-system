@@ -13,7 +13,7 @@ class School extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'address', 'email', 'phone', 'password', 'profile_picture'];
+    protected $fillable = ['name', 'address', 'email', 'phone', 'password', 'profile_picture', 'email_verified_at'];
 
     protected $hidden = ['password'];
 

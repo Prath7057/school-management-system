@@ -4,47 +4,41 @@ namespace App\Http\Controllers\School\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Models\School;
 
 class VerifyEmailController extends Controller
 {
-    /**
-     * Show the email verification notice.
-     */
-    public function show()
+    public function verify(Request $request, $id, $hash): RedirectResponse
     {
-        return view('School.auth.verify-email');
-    }
+        $school = School::findOrFail($id);
 
-    /**
-     * Mark the authenticated user's email address as verified.
-     */
-    public function verify(EmailVerificationRequest $request): RedirectResponse
-    {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('School.dashboard', absolute: false) . '?verified=1');
+        if (!hash_equals((string) $hash, sha1($school->getEmailForVerification()))) {
+            return redirect()->route('School.login')->with('error', 'Invalid verification link.');
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        if ($school->hasVerifiedEmail()) {
+            return redirect()->route('School.dashboard')->with('message', 'Email is already verified.');
         }
 
-        return redirect()->intended(route('School.dashboard', absolute: false) . '?verified=1');
+        $school->markEmailAsVerified();
+        event(new Verified($school));
+
+        Auth::guard('school')->login($school);
+
+        return redirect()->route('School.dashboard')->with('message', 'Email verified successfully.');
     }
 
-    /**
-     * Resend the email verification link.
-     */
     public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->route('School.dashboard');
+            return redirect()->route('School.dashboard')->with('message', 'Email is already verified.');
         }
 
         $request->user()->sendEmailVerificationNotification();
 
-        return back()->with('message', 'A new verification link has been sent to your email address.');
+        return back()->with('message', 'A new verification link has been sent to your email.');
     }
 }
