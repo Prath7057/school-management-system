@@ -4,8 +4,8 @@ return [
 
 
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'web'),
-        'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
+        'guard' => env('AUTH_GUARD', 'school'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'schools'),
     ],
 
     'providers' => [
@@ -23,13 +23,13 @@ return [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
-            'throttle' => 60,
+            'throttle' => 10,
         ],
         'schools' => [
             'provider' => 'schools',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
-            'throttle' => 60,
+            'throttle' => 10,
         ],
     ],
 

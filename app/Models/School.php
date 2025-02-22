@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\SchoolResetPasswordNotification;
 
 class School extends Authenticatable implements MustVerifyEmail
 {
@@ -23,4 +24,11 @@ class School extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Student::class);
     }
+
+
+public function sendPasswordResetNotification($token)
+{
+    $this->notify(new SchoolResetPasswordNotification($token));
+}
+
 }

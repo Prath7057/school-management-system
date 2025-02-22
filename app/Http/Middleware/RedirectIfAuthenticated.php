@@ -18,7 +18,7 @@ class RedirectIfAuthenticated
                 if ($guard === 'school') {
                     return redirect()->route('School.dashboard');
                 }
-                return redirect()->route('home'); // Default user dashboard
+                return redirect()->route('/');
             }
         }
 
