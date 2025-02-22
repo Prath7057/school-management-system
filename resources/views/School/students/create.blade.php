@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-school-app-layout>
     <div class="max-w-4xl mx-auto p-6 bg-white shadow-sm sm:rounded-lg" style="width: 50%">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center mb-4">
             {{ __('Add Student Form') }}
@@ -21,7 +21,12 @@
 
                 <div>
                     <x-input-label for="class" :value="__('Class')" />
-                    <x-text-input id="class" class="block mt-1 w-full" type="text" name="class" required />
+                    <select id="class" name="class" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                        <option value="">Select Class</option>
+                        @for ($i = 1; $i <= 12; $i++)
+                            <option value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
                     @error('class') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                 </div>
 
@@ -68,7 +73,7 @@
 
             <div class="mt-4">
                 <x-input-label for="profile_picture" :value="__('Profile Picture')" />
-                <x-text-input id="profile_picture" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" type="file" name="profile_picture" />
+                <x-text-input id="profile_picture" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" style="border-radius: 0px;" type="file" name="profile_picture" />
                 @error('profile_picture') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
@@ -79,4 +84,4 @@
             </div>
         </form>
     </div>
-</x-app-layout>
+</x-school-app-layout>

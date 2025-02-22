@@ -1,7 +1,7 @@
 <x-school-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('School - Profile') }}
+            {{ auth()->guard('school')->user()->name . " - Dashboard" ?? 'School - Dashboard' }}
         </h2>
     </x-slot>
 

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-school-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Students') }}
@@ -11,77 +11,120 @@
                 <x-primary-button class="mb-4">{{ __('Add Student') }}</x-primary-button>
             </a>
 
-            <table class="w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border px-4 py-2">Name</th>
-                        <th class="border px-4 py-2">Email</th>
-                        <th class="border px-4 py-2">Class</th>
-                        <th class="border px-4 py-2">Age</th>
-                        <th class="border px-4 py-2">Gender</th>
-                        <th class="border px-4 py-2">City</th>
-                        <th class="border px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($students as $student)
-                    <tr>
-                        <td class="border px-4 py-2">{{ $student->name }}</td>
-                        <td class="border px-4 py-2">{{ $student->email }}</td>
-                        <td class="border px-4 py-2">{{ $student->class }}</td>
-                        <td class="border px-4 py-2">{{ $student->age }}</td>
-                        <td class="border px-4 py-2">{{ $student->gender }}</td>
-                        <td class="border px-4 py-2">{{ $student->city }}</td>
-                        <td class="border px-4 py-2">
-                            <a href="{{ route('School.editStudent', $student->id) }}" 
-                               class="text-blue-600 edit-student"
-                               data-name="{{ $student->name }}">
-                                Edit
-                            </a>
+            <!--filter
+                
+            <form method="GET" action="{{ route('School.listStudents') }}" class="mb-2">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="class" value="{{ request('class') }}" class="form-control"
+                            placeholder="Enter Class">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="age" value="{{ request('age') }}" class="form-control"
+                            placeholder="Enter Age">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="city" value="{{ request('city') }}" class="form-control"
+                            placeholder="Enter City">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="{{ route('School.listStudents') }}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </div>
+            </form>
 
-                            <form action="{{ route('School.deleteStudent', $student->id) }}" method="POST" class="inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 ml-2 delete-student" data-name="{{ $student->name }}">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        -->
+            <div class="table-responsive">
+                <table id="studentsTable" class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Class</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>City</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($students as $student)
+                            <tr>
+                                <td>
+                                    <img src="{{ asset('storage/' . $student->profile_picture) }}" alt="Profile Picture"
+                                        class="" width="50">
+                                </td>
+                                <td>{{ $student->name }}</td>
+                                <td>{{ $student->email }}</td>
+                                <td>{{ $student->class }}</td>
+                                <td>{{ $student->age }}</td>
+                                <td>{{ $student->gender }}</td>
+                                <td>{{ $student->city }}</td>
+                                <td>
+                                    <a href="{{ route('School.editStudent', $student->id) }}"
+                                        class="btn btn-primary btn-sm edit-student" data-name="{{ $student->name }}">
+                                        Edit
+                                    </a>
 
-            <div class="mt-4">
-                {{ $students->links() }} <!-- Pagination -->
+                                    <form action="{{ route('School.deleteStudent', $student->id) }}" method="POST"
+                                        class="d-inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm delete-student"
+                                            data-name="{{ $student->name }}">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
         </div>
+
     </div>
 
-    <!-- JavaScript for Confirmation Alerts -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Edit Confirmation
-            document.querySelectorAll('.edit-student').forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    let studentName = this.getAttribute('data-name');
-                    if (confirm(`Are you sure you want to edit ${studentName}?`)) {
-                        window.location.href = this.href;
-                    }
-                });
+        $(document).ready(function() {
+            $('#studentsTable').DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                "pageLength": 5,
+                "searching": true,
+                "lengthChange": true,
+                "lengthMenu": [5, 10, 20, 50, 100],
+                
             });
 
-            // Delete Confirmation
-            document.querySelectorAll('.delete-form').forEach(form => {
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-                    let studentName = this.querySelector('.delete-student').getAttribute('data-name');
-                    if (confirm(`Are you sure you want to delete ${studentName}? This action cannot be undone.`)) {
-                        this.submit();
-                    }
-                });
+            $('.edit-student').on('click', function(event) {
+                event.preventDefault();
+                let studentName = $(this).data('name');
+                if (confirm(`Are you sure you want to edit ${studentName}?`)) {
+                    window.location.href = $(this).attr('href');
+                }
+            });
+
+            $('.delete-form').on('submit', function(event) {
+                event.preventDefault();
+                let studentName = $(this).find('.delete-student').data('name');
+                if (confirm(
+                        `Are you sure you want to delete ${studentName}? This action cannot be undone.`)) {
+                    this.submit();
+                }
             });
         });
     </script>
-</x-app-layout>
+</x-school-app-layout>

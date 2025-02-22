@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-school-app-layout>
     <div class="max-w-4xl mx-auto p-4 bg-white shadow-sm sm:rounded-lg" style="width: 50%;">
         
         <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
@@ -22,7 +22,13 @@
 
                 <div>
                     <x-input-label for="class" :value="__('Class')" />
-                    <x-text-input id="class" class="block mt-1 w-full" type="text" name="class" value="{{ $student->class }}" required />
+                    <select id="class" name="class" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+                        <option value="">Select Class</option>
+                        @for ($i = 1; $i <= 12; $i++)
+                            <option value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
+                    @error('class') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
@@ -106,4 +112,5 @@
             });
         });
     </script>
-</x-app-layout>
+    
+</x-school-app-layout>

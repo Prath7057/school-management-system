@@ -1,4 +1,7 @@
 <x-school-guest-layout>
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center mb-4">
+        {{ __('Register') }}
+    </h2>
     <form method="POST" action="{{ route('School.register') }}" enctype="multipart/form-data">
         @csrf
 

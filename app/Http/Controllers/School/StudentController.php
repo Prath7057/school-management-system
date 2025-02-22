@@ -56,20 +56,20 @@ class StudentController extends Controller
 
     public function index(Request $request)
     {
-        $students = Student::query();
-
-        if ($request->has('class')) {
-            $students->where('class', $request->class);
+        $query = Student::query();
+    
+        if ($request->has('class') && $request->class !== null) {
+            $query->where('class', $request->class);
         }
-        if ($request->has('age')) {
-            $students->where('age', $request->age);
+        if ($request->has('age') && $request->age !== null) {
+            $query->where('age', $request->age);
         }
-        if ($request->has('city')) {
-            $students->where('city', $request->city);
+        if ($request->has('city') && $request->city !== null) {
+            $query->where('city', $request->city);
         }
-
-        $students = $students->paginate(5);
-
+    
+        $students = $query->get();
+    
         return view('school.students.index', compact('students'));
     }
 
@@ -123,4 +123,7 @@ class StudentController extends Controller
 
         return redirect()->route('School.listStudents')->with('success', 'Student deleted successfully.');
     }
+    //
+
+    
 }

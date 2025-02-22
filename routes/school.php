@@ -14,6 +14,9 @@ use App\Http\Controllers\School\StudentController;
 
 Route::prefix('School')->name('School.')->group(function () {
 
+    Route::get('/', function () {
+        return view('School.auth.login');
+    });
     // Guest Routes
     Route::middleware('guest:school')->group(function () {
         Route::get('register', [RegisteredSchoolController::class, 'create'])
