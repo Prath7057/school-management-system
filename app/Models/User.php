@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Notifications\SchoolVerifyEmailNotification;
 
 class User extends Authenticatable
 {
@@ -47,8 +46,4 @@ class User extends Authenticatable
         ];
     }
 
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new SchoolVerifyEmailNotification());
-    }
 }

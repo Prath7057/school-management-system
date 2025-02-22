@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\SchoolResetPasswordNotification;
+use App\Notifications\SchoolVerifyEmailNotification;
 
 class School extends Authenticatable implements MustVerifyEmail
 {
@@ -25,10 +26,13 @@ class School extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Student::class);
     }
 
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new SchoolResetPasswordNotification($token));
+    }
 
-public function sendPasswordResetNotification($token)
-{
-    $this->notify(new SchoolResetPasswordNotification($token));
-}
-
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new SchoolVerifyEmailNotification());
+    }
 }
