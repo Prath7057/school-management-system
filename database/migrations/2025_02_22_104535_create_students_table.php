@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('city');
             $table->string('zip_code');
+            $table->string('imported')->nullable();
             $table->timestamps();
             $table->foreignId('school_id')->constrained('schools')->onDelete('cascade');
         });

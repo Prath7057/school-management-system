@@ -45,6 +45,11 @@
                         <x-dropdown-link :href="route('School.listStudents')">
                             {{ __('Student List') }}
                         </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('School.importStudents')">
+                            {{ __('Import Students') }}
+                        </x-dropdown-link>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('School.logout') }}">
                             @csrf

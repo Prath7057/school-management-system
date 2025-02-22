@@ -52,10 +52,14 @@
                     <tbody>
                         @foreach ($students as $student)
                             <tr>
-                                <td>
-                                    <img src="{{ asset('storage/' . $student->profile_picture) }}" alt="Profile Picture"
-                                        class="" width="50">
+                                <td class="text-center">
+                                    <img src="{{ $student->profile_picture ? asset('storage/' . $student->profile_picture) : 'https://dummyimage.com/48X48/5c5b5c/ffffff.png&text=Image' }}" 
+                                        alt="Profile Picture" 
+                                        class="w-12 h-12 rounded-md object-cover mx-auto border border-gray-300 shadow-md">
                                 </td>
+                                
+                                
+                                
                                 <td>{{ $student->name }}</td>
                                 <td>{{ $student->email }}</td>
                                 <td>{{ $student->class }}</td>

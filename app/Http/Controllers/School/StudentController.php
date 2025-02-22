@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -56,8 +56,8 @@ class StudentController extends Controller
 
     public function index(Request $request)
     {
-        $query = Student::query();
-    
+        $query = Student::where('school_id', Auth::id());
+
         if ($request->has('class') && $request->class !== null) {
             $query->where('class', $request->class);
         }
@@ -67,9 +67,9 @@ class StudentController extends Controller
         if ($request->has('city') && $request->city !== null) {
             $query->where('city', $request->city);
         }
-    
+
         $students = $query->get();
-    
+
         return view('school.students.index', compact('students'));
     }
 
@@ -124,6 +124,99 @@ class StudentController extends Controller
         return redirect()->route('School.listStudents')->with('success', 'Student deleted successfully.');
     }
     //
+    public function createImportStudents()
+    {
+        return view('school.students.import');
+    }
 
-    
+
+    public function importStudents(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048'
+        ]);
+
+        $file = $request->file('file');
+        $fileData = file($file->getPathname());
+
+        $schoolId = Auth::user()->id;
+        $headerSkipped = false;
+        $students = [];
+
+        foreach ($fileData as $line) {
+            if (!$headerSkipped) {
+                $headerSkipped = true;
+                continue;
+            }
+
+            $data = str_getcsv($line);
+
+            // Ensure there are at least 10 columns
+            if (count($data) >= 10) {
+                $profilePicturePath = null;
+
+                // Validate name, email, class, age, gender, and other fields
+                if (
+                    empty($data[0]) || empty($data[1]) || empty($data[2]) || empty($data[3]) ||
+                    empty($data[4]) || empty($data[5]) || empty($data[6]) || empty($data[7]) ||
+                    empty($data[8]) || empty($data[9])
+                ) {
+                    continue; // Skip invalid rows
+                }
+
+                // Validate email format
+                if (!filter_var($data[1], FILTER_VALIDATE_EMAIL)) {
+                    continue;
+                }
+
+                // Validate age is numeric
+                if (!is_numeric($data[3]) || $data[3] < 1 || $data[3] > 100) {
+                    continue;
+                }
+
+                // Handle profile picture (check if it's a valid file path)
+                if (!empty($data[5]) && file_exists($data[5])) {
+                    $filename = uniqid() . '_' . basename($data[5]); // Generate unique filename
+                    $destinationPath = storage_path('app/public/student_profiles/');
+
+                    // Ensure directory exists
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0777, true);
+                    }
+
+                    // Move the file to storage
+                    copy($data[5], $destinationPath . $filename);
+
+                    // Save relative path in DB
+                    $profilePicturePath = 'student_profiles/' . $filename;
+                }
+
+                $students[] = [
+                    'name' => $data[0],
+                    'email' => $data[1],
+                    'class' => $data[2],
+                    'age' => $data[3],
+                    'gender' => $data[4],
+                    'profile_picture' => $profilePicturePath,
+                    'country' => $data[6],
+                    'state' => $data[7],
+                    'city' => $data[8],
+                    'zip_code' => $data[9],
+                    'school_id' => $schoolId,
+                    'imported' => 'true',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        // Insert students into the database
+        if (!empty($students)) {
+            Student::insert($students);
+            return redirect()->route('School.importStudents')->with('success', 'Students imported successfully.');
+        }
+
+        return redirect()->route('School.importStudents')->with('error', 'Invalid CSV format or empty file.');
+    }
 }

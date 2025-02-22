@@ -88,5 +88,7 @@ Route::prefix('School')->name('School.')->group(function () {
         Route::get('edit-student/{id}', [StudentController::class, 'edit'])->name('editStudent');
         Route::put('update-student/{id}', [StudentController::class, 'update'])->name('updateStudent');
         Route::delete('delete-student/{id}', [StudentController::class, 'destroy'])->name('deleteStudent');
+        Route::get('import-students', [StudentController::class, 'createImportStudents'])->name('importStudents');
+        Route::post('import-students', [StudentController::class, 'importStudents'])->name('importStudents');
     });
 });
