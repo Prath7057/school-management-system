@@ -33,7 +33,7 @@
         <!-- Profile Picture Upload -->
         <div class="mt-4">
             <x-input-label for="profile_picture" :value="__('Profile Picture')" />
-            <x-text-input id="profile_picture" class="block mt-1 w-full" type="file" name="profile_picture" accept="image/*" />
+            <x-text-input id="profile_picture" class="block mt-1 w-full" style="border-radius: 0px;" type="file" name="profile_picture" accept="image/*" />
             <x-input-error :messages="$errors->get('profile_picture')" class="mt-2" />
         </div>
 
