@@ -27,11 +27,7 @@ class RegisteredSchoolController extends Controller
             'password' => 'required|min:6|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
-    
-        if ($validator->fails()) {
-            dd($validator->errors()->all()); 
-        }
-
+        
         $school = School::create([
             'name' => $request->name,
             'address' => $request->address,
