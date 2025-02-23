@@ -1,5 +1,10 @@
 <x-school-app-layout>
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-sm sm:rounded-lg" style="width: 50%">
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ auth()->guard('school')->user()->name . " - Dashboard" ?? 'School - Dashboard' }}
+        </h2>
+    </x-slot>
+    <div class="max-w-4xl mx-auto p-6 bg-white shadow-sm sm:rounded-lg mt-2" style="width: 50%">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center mb-4">
             {{ __('Add Student Form') }}
         </h2>
@@ -66,16 +71,17 @@
 
                 <div>
                     <x-input-label for="zip_code" :value="__('Zip Code')" />
-                    <x-text-input id="zip_code" class="block mt-1 w-full" type="text" name="zip_code" required />
+                    <x-text-input id="zip_code" class="block mt-1 w-full" type="number" name="zip_code" required />
                     @error('zip_code') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+                </div>
+                <div >
+                    <x-input-label for="profile_picture" :value="__('Profile Picture')" />
+                    <x-text-input id="profile_picture" class="block mt-2 w-full border-gray-300 rounded-md shadow-sm" style="border-radius: 0px;" type="file" name="profile_picture" />
+                    @error('profile_picture') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                 </div>
             </div>
 
-            <div class="mt-4">
-                <x-input-label for="profile_picture" :value="__('Profile Picture')" />
-                <x-text-input id="profile_picture" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" style="border-radius: 0px;" type="file" name="profile_picture" />
-                @error('profile_picture') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
+            
 
             <div class="mt-6 text-center">
                 <x-primary-button>

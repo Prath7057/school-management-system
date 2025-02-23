@@ -1,6 +1,6 @@
 <x-school-guest-layout>
     <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center mb-4">
-        {{ __('Register') }}
+        {{ __('School Register') }}
     </h2>
     <form method="POST" action="{{ route('School.register') }}" enctype="multipart/form-data">
         @csrf
@@ -29,7 +29,7 @@
         <!-- Phone Number -->
         <div class="mt-4">
             <x-input-label for="phone" :value="__('Phone Number')" />
-            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required />
+            <x-text-input id="phone" class="block mt-1 w-full" type="number" name="phone" :value="old('phone')" required />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 

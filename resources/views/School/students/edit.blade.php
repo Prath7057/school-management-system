@@ -1,5 +1,10 @@
 <x-school-app-layout>
-    <div class="max-w-4xl mx-auto p-4 bg-white shadow-sm sm:rounded-lg" style="width: 50%;">
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ auth()->guard('school')->user()->name . " - Dashboard" ?? 'School - Dashboard' }}
+        </h2>
+    </x-slot>
+    <div class="max-w-4xl mx-auto p-4 bg-white shadow-sm sm:rounded-lg mt-4" style="width: 50%;">
         
         <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
             {{ __('Edit Student') }}
@@ -25,7 +30,7 @@
                     <select id="class" name="class" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                         <option value="">Select Class</option>
                         @for ($i = 1; $i <= 12; $i++)
-                            <option value="{{ $i }}">{{ $i }}</option>
+                            <option value="{{ $i }}" @selected($student->class == $i)>{{ $i }}</option>
                         @endfor
                     </select>
                     @error('class') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
@@ -78,7 +83,7 @@
 
                 <div>
                     <x-input-label for="zip_code" :value="__('Zip Code')" />
-                    <x-text-input id="zip_code" class="block mt-1 w-full" type="text" name="zip_code" value="{{ $student->zip_code }}" required />
+                    <x-text-input id="zip_code" class="block mt-1 w-full" type="number" name="zip_code" value="{{ $student->zip_code }}" required />
                 </div>
             </div>
 

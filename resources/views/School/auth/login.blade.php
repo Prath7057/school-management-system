@@ -2,16 +2,16 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center mb-4">
-        {{ __('Login') }}
+        {{ __('School Login') }}
     </h2>
     @if (session('message'))
-        <div class="alert alert-success text-green-800  text-center">
+        <div class="alert alert-success text-green-800  text-center" style="color:green">
             {{ session('message') }}
         </div>
     @endif
 
     @if (session('error'))
-        <div class="alert alert-danger text-red-800  text-center">
+        <div class="alert alert-danger text-red-800  text-center" style="color:red">
             {{ session('error') }}
         </div>
     @endif
@@ -43,20 +43,21 @@
                     class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
+            @if (Route::has('password.request'))
+            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                href="{{ route('School.password.request') }}">
+                {{ __('Forgot your password?') }}
+            </a>
+        @endif
+
+           
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
             <a class="text-sm text-gray-600 hover:text-gray-900" href="{{ route('School.register') }}">
                 <span style="text-decoration: none;">Don't Have an Account?</span> <span
                     class="underline">Register</span>
             </a>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    href="{{ route('School.password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
             </x-primary-button>
