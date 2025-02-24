@@ -21,8 +21,8 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-                autofocus autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
+                required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -44,13 +44,19 @@
                 <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
             </label>
             @if (Route::has('password.request'))
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                href="{{ route('School.password.request') }}">
-                {{ __('Forgot your password?') }}
-            </a>
-        @endif
-
-           
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    href="{{ route('School.password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
+        </div>
+        <!-- login without verify mail -->
+        <div class="block flex items-center justify-between">
+            <label for="bypass_verify_email" class="inline-flex items-center">
+                <input id="bypass_verify_email" type="checkbox"
+                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="bypass_verify_email">
+                <span class="ms-2 text-sm text-gray-600">{{ __('Login with an unverified email') }}</span>
+            </label>
         </div>
 
         <div class="flex items-center justify-end mt-4">
