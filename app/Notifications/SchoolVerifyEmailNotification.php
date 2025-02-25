@@ -15,7 +15,7 @@ class SchoolVerifyEmailNotification extends VerifyEmail
     protected function verificationUrl($notifiable)
     {
         return URL::temporarySignedRoute(
-            'School.verification.verify',  // ✅ Use the correct route name
+            'School.verification.verify',
             Carbon::now()->addMinutes(config('auth.verification.expire', 60)),
             [
                 'id' => $notifiable->getKey(),

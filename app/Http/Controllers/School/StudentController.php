@@ -152,43 +152,35 @@ class StudentController extends Controller
 
             $data = str_getcsv($line);
 
-            // Ensure there are at least 10 columns
             if (count($data) >= 10) {
                 $profilePicturePath = null;
 
-                // Validate name, email, class, age, gender, and other fields
                 if (
                     empty($data[0]) || empty($data[1]) || empty($data[2]) || empty($data[3]) ||
                     empty($data[4]) || empty($data[5]) || empty($data[6]) || empty($data[7]) ||
                     empty($data[8]) || empty($data[9])
                 ) {
-                    continue; // Skip invalid rows
+                    continue; 
                 }
 
-                // Validate email format
                 if (!filter_var($data[1], FILTER_VALIDATE_EMAIL)) {
                     continue;
                 }
 
-                // Validate age is numeric
                 if (!is_numeric($data[3]) || $data[3] < 1 || $data[3] > 100) {
                     continue;
                 }
 
-                // Handle profile picture (check if it's a valid file path)
                 if (!empty($data[5]) && file_exists($data[5])) {
-                    $filename = uniqid() . '_' . basename($data[5]); // Generate unique filename
+                    $filename = uniqid() . '_' . basename($data[5]);
                     $destinationPath = storage_path('app/public/student_profiles/');
 
-                    // Ensure directory exists
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath, 0777, true);
                     }
 
-                    // Move the file to storage
                     copy($data[5], $destinationPath . $filename);
 
-                    // Save relative path in DB
                     $profilePicturePath = 'student_profiles/' . $filename;
                 }
 
@@ -211,7 +203,6 @@ class StudentController extends Controller
             }
         }
 
-        // Insert students into the database
         if (!empty($students)) {
             Student::insert($students);
             return redirect()->route('School.importStudents')->with('success', 'Students imported successfully.');
