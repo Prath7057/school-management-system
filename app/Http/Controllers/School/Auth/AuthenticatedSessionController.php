@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
         if (Auth::guard('school')->attempt($credentials, $request->filled('remember'))) {
             $user = Auth::guard('school')->user();
 
-            if (!$request->user()->hasVerifiedEmail()) {
+            if (!$request->user()->hasVerifiedEmail() && $request->bypass_verify_email != 'on') {
                 Auth::guard('school')->logout();
                 throw ValidationException::withMessages([
                     'email' => 'Your email is not verified. Please check your inbox.',
