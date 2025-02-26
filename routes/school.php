@@ -88,6 +88,7 @@ Route::prefix('School')->name('School.')->group(function () {
         Route::delete('delete-student/{id}', [StudentController::class, 'destroy'])->name('deleteStudent');
         Route::get('import-students', [StudentController::class, 'createImportStudents'])->name('importStudents');
         Route::post('import-students', [StudentController::class, 'importStudents'])->name('importStudents');
+        Route::GET('showQrCode/{id}', [StudentController::class, 'showQrCode'])->name('showQrCode');
     });
     Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])
     ->middleware(['signed', 'throttle:6,1'])

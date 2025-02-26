@@ -49,6 +49,7 @@ class StudentController extends Controller
             'city' => $request->city,
             'zip_code' => $request->zip_code,
             'school_id' => Auth::user()->id, // Assign logged-in school
+            'barcode' => 'A' . mt_rand(100000, 999999),
         ]);
 
         return redirect()->route('School.listStudents')->with('success', 'Student added successfully.');
@@ -209,5 +210,10 @@ class StudentController extends Controller
         }
 
         return redirect()->route('School.importStudents')->with('error', 'Invalid CSV format or empty file.');
+    }
+    //
+    public function showQrCode($id) {
+        $students = Student::whereIn('id', explode(',', $id))->get();
+        return view('school.students.qr', compact('students'));
     }
 }

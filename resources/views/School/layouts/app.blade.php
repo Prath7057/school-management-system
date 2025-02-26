@@ -39,7 +39,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main id="student-app-layout">
                 {{ $slot }}
             </main>
         <script src="{{ asset('scripts/script.js') }}"></script>

@@ -9,7 +9,7 @@ class Student extends Model
     protected $fillable = [
         'name', 'email', 'class', 'age', 'gender',
         'profile_picture', 'country', 'state', 'city',
-        'zip_code', 'school_id'
+        'zip_code', 'school_id', 'barcode'
     ];
     //
     public function school()
