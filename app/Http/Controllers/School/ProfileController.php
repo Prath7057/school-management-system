@@ -22,9 +22,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(SchoolUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
