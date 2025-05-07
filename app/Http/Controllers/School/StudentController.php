@@ -81,7 +81,6 @@ class StudentController extends Controller
         return view('school.students.edit', compact('student'));
     }
 
-    // Update student
     public function update(Request $request, $id)
     {
         $student = Student::findOrFail($id);
